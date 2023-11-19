@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart'; //used for formatting date.
 import 'package:table_calendar/table_calendar.dart';
 
 void main() {
@@ -26,6 +27,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _focusedDay = DateTime.now();
+  final DateTime _displayDate = DateTime.now();
   DateTime? _selectedDay;
 
   //
@@ -33,6 +35,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    //format the DateTime using date format. There are two ways to do it. If
+    //one is chosen the other line should be commented out.
+    // String formattedDate = DateFormat('d-MMMM-y').format(_displayDate);
+    String formattedDate = DateFormat.MMMEd().format(_displayDate);
     return Scaffold(
       appBar: AppBar(
         title: const Text("Calendar Controller"),
@@ -42,9 +48,41 @@ class _MyHomePageState extends State<MyHomePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
+                padding: const EdgeInsets.all(3.0),
+                width: double.infinity,
+                color: Colors.amberAccent,
+                child: Text("Today:    $formattedDate")),
+            Container(
               padding: const EdgeInsets.all(10.0),
               color: Colors.brown,
               child: TableCalendar(
+                headerStyle: const HeaderStyle(
+                  titleCentered: true,
+                  titleTextStyle: TextStyle(
+                    fontSize: 22,
+                    color: Colors.white,
+                  ),
+                  formatButtonVisible: false,
+                  formatButtonShowsNext: false,
+                  // leftChevronPadding: EdgeInsets.all(0.0),
+                  // leftChevronMargin: EdgeInsets.all(0.0),
+                  leftChevronIcon: Icon(
+                    Icons.arrow_left,
+                    size: 32.0,
+                    color: Colors.white,
+                  ),
+                  rightChevronIcon: Icon(
+                    Icons.arrow_right,
+                    size: 32.0,
+                    color: Colors.white,
+                  ),
+                  // rightChevronPadding: EdgeInsets.all(2.0),
+                  // rightChevronMargin: EdgeInsets.all(3.0),
+                  // formatButtonDecoration: BoxDecoration(
+                  //   shape: BoxShape.rectangle,
+                  //   color: Colors.blueAccent,
+                  // ),
+                ),
                 //"daysOfWeekStyle" can give a background color behind the day
                 //names at the top.
                 daysOfWeekStyle: const DaysOfWeekStyle(
@@ -119,7 +157,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   ), //BoxDecoration
                 ), //CalendarStyle
               ), //TableCalendar
-            ) //Container
+            ), //Container
+            // print(_focusedDay),
           ],
         ), //Column
       ), //SingleChildScrollView
