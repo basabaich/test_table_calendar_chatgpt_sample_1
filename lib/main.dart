@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-//import 'package:table_calendar/table_calendar';
 import 'package:table_calendar/table_calendar.dart';
 
 void main() {
@@ -13,7 +12,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       home: MyHomePage(),
-    );
+    ); //MaterialApp
   }
 }
 
@@ -28,21 +27,16 @@ class _MyHomePageState extends State<MyHomePage> {
   CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
-  //CalendarController _calendarController;
+
   //
   //
-  @override
-  void initState() {
-    super.initState();
-    //_calendarController = CalendarController();
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Calendar Controller"),
-      ),
+      ), //AppBar
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -54,9 +48,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 //"daysOfWeekStyle" can give a background color behind the day
                 //names at the top.
                 daysOfWeekStyle: const DaysOfWeekStyle(
-                    decoration: BoxDecoration(
-                  color: Colors.yellow,
-                )),
+                  decoration: BoxDecoration(
+                    color: Colors.yellow,
+                  ), //BoxDecoration
+                ), //DaysOfWeekStyle
                 focusedDay: _focusedDay,
                 //When "weekendDays" are "null" (or empty like here), all
                 //days of the month are considered as weekdays only.
@@ -96,7 +91,6 @@ class _MyHomePageState extends State<MyHomePage> {
                   _focusedDay = focusedDay;
                 },
 
-                //calendarController: _calendarController,
                 calendarStyle: CalendarStyle(
                   //"defaultTextStyle" will control all texts in the cells of
                   //the calendar.
@@ -122,13 +116,13 @@ class _MyHomePageState extends State<MyHomePage> {
                     border: Border.all(color: Colors.black),
                     shape: BoxShape.rectangle,
                     //borderRadius: BorderRadius.circular(8.0),
-                  ),
-                ),
-              ),
-            )
+                  ), //BoxDecoration
+                ), //CalendarStyle
+              ), //TableCalendar
+            ) //Container
           ],
-        ),
-      ),
-    );
+        ), //Column
+      ), //SingleChildScrollView
+    ); //Scaffold
   }
 }
