@@ -58,16 +58,17 @@ class _MyHomePageState extends State<MyHomePage> {
                   color: Colors.yellow,
                 )),
                 focusedDay: _focusedDay,
-                //When "weekendDays" are "null" (or empty like here), all days of
-                //the month are considered as weekdays only.
+                //When "weekendDays" are "null" (or empty like here), all
+                //days of the month are considered as weekdays only.
                 weekendDays: const [],
                 startingDayOfWeek: StartingDayOfWeek.monday,
                 firstDay: DateTime.utc(2000),
                 lastDay: DateTime.utc(2050),
                 calendarFormat: _calendarFormat,
                 selectedDayPredicate: (day) {
-                  // Use `selectedDayPredicate` to determine which day is currently selected.
-                  // If this returns true, then `day` will be marked as selected.
+                  // Use `selectedDayPredicate` to determine which day is
+                  //currently selected. If this returns true, then `day` will
+                  //be marked as selected.
 
                   // Using `isSameDay` is recommended to disregard
                   // the time-part of compared DateTime objects.
