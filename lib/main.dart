@@ -37,8 +37,12 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     //format the DateTime using date format. There are two ways to do it. If
     //one is chosen the other line should be commented out.
-    // String formattedDate = DateFormat('d-MMMM-y').format(_displayDate);
-    String formattedDate = DateFormat.MMMEd().format(_displayDate);
+    // String formattedDate1 = DateFormat('d-MMMM-y').format(_displayDate);
+    String formattedDate2 = DateFormat.MMMEd().format(_displayDate);
+
+    // Below "calendarDateYear" will show the month & year at the centre of the
+    //custom header we have made here.
+    String calendarDateYear = DateFormat.yMMMM().format(_focusedDay);
     return Scaffold(
       appBar: AppBar(
         title: const Text("Calendar Controller"),
@@ -48,41 +52,48 @@ class _MyHomePageState extends State<MyHomePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-                padding: const EdgeInsets.all(3.0),
-                width: double.infinity,
-                color: Colors.amberAccent,
-                child: Text("Today:    $formattedDate")),
+              padding: const EdgeInsets.all(2.0),
+              color: Colors.brown,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  //Text on today's day, month & date
+                  Text(formattedDate2),
+                  //Previous button method
+                  CustomPrevMonthButton(
+                    onPressed: () {
+                      setState(() {
+                        _focusedDay = DateTime(
+                          _focusedDay.year,
+                          _focusedDay.month - 1,
+                        ); //DateTime
+                      });
+                    },
+                  ), //CustomPrevMonthButton
+                  //Text button to show the month & year
+                  Text(
+                    calendarDateYear,
+                    style: const TextStyle(fontSize: 22),
+                  ), //Text
+                  //Next button method
+                  CustomNextMonthButton(
+                    onPressed: () {
+                      setState(() {
+                        _focusedDay = DateTime(
+                          _focusedDay.year,
+                          _focusedDay.month + 1,
+                        ); //DateTime
+                      });
+                    },
+                  ), //CustomNextMonthButton
+                ],
+              ), //Row
+            ), //Container
             Container(
               padding: const EdgeInsets.all(10.0),
               color: Colors.brown,
               child: TableCalendar(
-                headerStyle: const HeaderStyle(
-                  titleCentered: true,
-                  titleTextStyle: TextStyle(
-                    fontSize: 22,
-                    color: Colors.white,
-                  ),
-                  formatButtonVisible: false,
-                  formatButtonShowsNext: false,
-                  // leftChevronPadding: EdgeInsets.all(0.0),
-                  // leftChevronMargin: EdgeInsets.all(0.0),
-                  leftChevronIcon: Icon(
-                    Icons.arrow_left,
-                    size: 32.0,
-                    color: Colors.white,
-                  ),
-                  rightChevronIcon: Icon(
-                    Icons.arrow_right,
-                    size: 32.0,
-                    color: Colors.white,
-                  ),
-                  // rightChevronPadding: EdgeInsets.all(2.0),
-                  // rightChevronMargin: EdgeInsets.all(3.0),
-                  // formatButtonDecoration: BoxDecoration(
-                  //   shape: BoxShape.rectangle,
-                  //   color: Colors.blueAccent,
-                  // ),
-                ),
+                headerVisible: false,
                 //"daysOfWeekStyle" can give a background color behind the day
                 //names at the top.
                 daysOfWeekStyle: const DaysOfWeekStyle(
@@ -135,7 +146,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   defaultTextStyle: const TextStyle(
                     color: Colors.white,
                     fontSize: 22,
-                  ),
+                  ), //TextStyle
                   isTodayHighlighted: false,
                   outsideDaysVisible: false,
                   cellMargin: const EdgeInsets.all(2.0),
@@ -143,12 +154,12 @@ class _MyHomePageState extends State<MyHomePage> {
                     color: Colors.blue,
                     shape: BoxShape.rectangle,
                     borderRadius: BorderRadius.circular(8.0),
-                  ),
+                  ), //BoxDecoration
                   selectedDecoration: BoxDecoration(
                     color: Colors.green,
                     shape: BoxShape.rectangle,
                     borderRadius: BorderRadius.circular(8.0),
-                  ),
+                  ), //BoxDecoration
                   defaultDecoration: BoxDecoration(
                     color: Colors.purple,
                     border: Border.all(color: Colors.black),
@@ -163,5 +174,35 @@ class _MyHomePageState extends State<MyHomePage> {
         ), //Column
       ), //SingleChildScrollView
     ); //Scaffold
+  }
+}
+
+class CustomPrevMonthButton extends StatelessWidget {
+  const CustomPrevMonthButton({required this.onPressed, super.key});
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: onPressed,
+      child: const Icon(
+        Icons.arrow_left,
+      ), //Icon
+    ); //ElevatedButton
+  }
+}
+
+class CustomNextMonthButton extends StatelessWidget {
+  const CustomNextMonthButton({required this.onPressed, super.key});
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: onPressed,
+      child: const Icon(
+        Icons.arrow_right,
+      ), //Icon
+    ); //ElevatedButton
   }
 }
