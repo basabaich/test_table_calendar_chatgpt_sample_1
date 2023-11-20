@@ -42,20 +42,65 @@ class _MyHomePageState extends State<MyHomePage> {
 
     // Below "calendarDateYear" will show the month & year at the centre of the
     //custom header we have made here.
-    String calendarDateYear = DateFormat.yMMMM().format(_focusedDay);
+    String calendarDateYear = DateFormat.yMMM().format(_focusedDay);
+
+    //Time to be shown at the extreme left of the custom heading.
+    String timeFormat1 = DateFormat('hh:mm a').format(DateTime.now());
+
     return Scaffold(
+      drawer: Drawer(
+        width: 175.0,
+        child: Column(
+          children: [
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.only(top: 55.0, bottom: 25, left: 55.0),
+              color: Colors.yellow,
+              child: const Text(
+                "Menu",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            const SizedBox(height: 10.0),
+            TextButton(onPressed: () {}, child: const Text("Add new note")),
+            const SizedBox(height: 20.0),
+            TextButton(onPressed: () {}, child: const Text("Reports")),
+            const SizedBox(height: 20.0),
+            TextButton(onPressed: () {}, child: const Text("Delete notes")),
+            const SizedBox(height: 20.0),
+            TextButton(onPressed: () {}, child: const Text("Edit notes")),
+            const SizedBox(height: 20.0),
+            TextButton(onPressed: () {}, child: const Text("Settings")),
+            const SizedBox(height: 20.0),
+            TextButton(onPressed: () {}, child: const Text("Feedback")),
+            const SizedBox(height: 20.0),
+            TextButton(onPressed: () {}, child: const Text("Remove Ads"))
+          ],
+        ),
+      ),
       appBar: AppBar(
-        title: const Text("Calendar Controller"),
+        backgroundColor: Colors.teal,
+        centerTitle: true,
+        title: const Text(
+          "Short calendar notes",
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.normal,
+          ),
+        ),
       ), //AppBar
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              padding: const EdgeInsets.all(2.0),
-              color: Colors.brown,
+              padding: const EdgeInsets.all(1.0),
+              color: Colors.white,
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   //Text on today's day, month & date
                   Text(formattedDate2),
@@ -73,7 +118,11 @@ class _MyHomePageState extends State<MyHomePage> {
                   //Text button to show the month & year
                   Text(
                     calendarDateYear,
-                    style: const TextStyle(fontSize: 22),
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Color.fromARGB(255, 228, 137, 1),
+                    ),
                   ), //Text
                   //Next button method
                   CustomNextMonthButton(
@@ -86,6 +135,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       });
                     },
                   ), //CustomNextMonthButton
+                  Text(timeFormat1),
                 ],
               ), //Row
             ), //Container
@@ -183,10 +233,10 @@ class CustomPrevMonthButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
+    return TextButton(
       onPressed: onPressed,
       child: const Icon(
-        Icons.arrow_left,
+        Icons.arrow_back_ios_new_sharp,
       ), //Icon
     ); //ElevatedButton
   }
@@ -198,10 +248,10 @@ class CustomNextMonthButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
+    return TextButton(
       onPressed: onPressed,
       child: const Icon(
-        Icons.arrow_right,
+        Icons.arrow_forward_ios_sharp,
       ), //Icon
     ); //ElevatedButton
   }
