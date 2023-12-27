@@ -128,8 +128,8 @@ class _MyHomePageState extends State<MyHomePage> {
               ), //ElevatedButton
             ],
           ), //Column
-        ),
-      ),
+        ), //Container
+      ), //SingleChildScrollView
     );
   }
 
@@ -225,13 +225,13 @@ class _MyHomePageState extends State<MyHomePage> {
                       Navigator.of(context).pop(); //This will close the drawer
                     },
                     child: Text(dataList[index]['noteName']),
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
+                  ), //InkWell
+                ), //ListTile
+              ), //Container
+            ), //ListView.builder
+          ), //ScrollBar
+        ), //Container
+      ), //Drawer
 
       appBar: AppBar(
         backgroundColor: Colors.teal,
@@ -241,27 +241,28 @@ class _MyHomePageState extends State<MyHomePage> {
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.normal,
-          ),
-        ),
+          ), //TextStyle
+        ), //Text
         actions: [
           PopupMenuButton(itemBuilder: (context) {
             return [
               PopupMenuItem(
-                  value: 0,
-                  onTap: _openAddMainOverlay, //Opening the bottom modal sheet
-                  child: const ListTile(
-                    leading: Icon(
-                      Icons.edit_document,
-                      size: 18.0,
-                    ),
-                    title: Text(
-                      "Add new note",
-                    ),
-                  )),
+                value: 0,
+                onTap: _openAddMainOverlay, //Opening the bottom modal sheet
+                child: const ListTile(
+                  leading: Icon(
+                    Icons.edit_document,
+                    size: 18.0,
+                  ),
+                  title: Text(
+                    "Add new note",
+                  ), //Text
+                ), //ListTile
+              ), //PopupMenuItem
               const PopupMenuItem(
                 value: 1,
                 child: Text('Setting'),
-              ),
+              ), //PopupMenuItem
               const PopupMenuItem(
                 value: 2,
                 child: ListTile(
@@ -269,20 +270,20 @@ class _MyHomePageState extends State<MyHomePage> {
                   leading: Icon(
                     Icons.home,
                     size: 30.0,
-                  ),
+                  ), //Icon
                   title: Text("Reports"),
-                ),
-              ),
+                ), //ListTile
+              ), //PopupMenuItem
               const PopupMenuItem(
                 value: 3,
                 child: Text('Edit Notes'),
-              ),
+              ), //PopupMenuItem
               const PopupMenuItem(
                 value: 4,
                 child: Text('Delete Notes'),
-              ),
+              ), //PopupMenuItem
             ];
-          }),
+          }), //PopupMenuItem
         ],
       ), //AppBar
       body: SingleChildScrollView(
@@ -317,7 +318,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                       color: Color.fromARGB(255, 228, 137, 1),
-                    ),
+                    ), //TextStyle
                   ), //Text
                   //Next button method
                   CustomNextMonthButton(
@@ -336,7 +337,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ), //Container
             const Divider(
               thickness: 2.0,
-            ),
+            ), //Divider
             //Second Block to show the Notes name & it's query
             Container(
               width: double.infinity,
@@ -359,9 +360,9 @@ class _MyHomePageState extends State<MyHomePage> {
                         Text('$_clickedNoteQuery')
                       else
                         Text('${_getStandardValue('key2')}'),
-                    ]),
-              ),
-            ),
+                    ]), //Column
+              ), //Padding
+            ), //Container
             Container(
               padding: const EdgeInsets.all(10.0),
               color: Colors.brown,
@@ -441,10 +442,10 @@ class _MyHomePageState extends State<MyHomePage> {
                   ), //BoxDecoration
                 ), //CalendarStyle
               ), //TableCalendar
-            ),
+            ), //Container
             const SizedBox(
               height: 2.0,
-            ),
+            ), //SizedBox
             Container(
               padding: const EdgeInsets.all(10.0),
               width: double.infinity, //width of 3rd Block
@@ -463,7 +464,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       foregroundColor: Colors.white,
                     ),
                     child: const Text('R'),
-                  ),
+                  ), //ElevatedButton
                   ElevatedButton(
                     onPressed: () {},
                     style: ElevatedButton.styleFrom(
@@ -471,7 +472,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       foregroundColor: Colors.white,
                     ),
                     child: const Text('G'),
-                  ),
+                  ), //ElevatedButton
                   ElevatedButton(
                     onPressed: () {},
                     style: ElevatedButton.styleFrom(
@@ -479,7 +480,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       foregroundColor: Colors.white,
                     ),
                     child: const Text('B'),
-                  ),
+                  ), //ElevatedButton
                   ElevatedButton(
                     onPressed: () {},
                     style: ElevatedButton.styleFrom(
@@ -487,9 +488,9 @@ class _MyHomePageState extends State<MyHomePage> {
                       foregroundColor: Colors.black,
                     ),
                     child: const Text('Y'),
-                  ),
+                  ), //ElevatedButton
                 ],
-              ),
+              ), //Row
             ) //Container
             // print(_focusedDay),
           ],
@@ -499,6 +500,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
+//For Theme Coloring use below class (see example)
 //class _amberAccentPrimaryValue() {}
 
 class CustomPrevMonthButton extends StatelessWidget {

@@ -60,49 +60,4 @@ class DbHelper {
     final db = await _openDatabase();
     return await db.query('users');
   }
-
-  //##
-  //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-  // Future<void> initialiseDatabase() async {
-  //   var _database = await openDatabase(
-  //     join(await getDatabasesPath(), 'My_dataBase.db'),
-  //     onCreate: (db, version) async {
-  //       await db.execute('''CREATE TABLE IF NOT EXISTS users(
-  //         id INTEGER PRIMARY KEY AUTOINCREMENT, noteName TEXT,
-  //         noteQuery TEXT)''');
-  //       await db.execute('''CREATE TABLE IF NOT EXISTS clickedNotes(
-  //         id INTEGER PRIMARY KEY AUTOINCREMENT, clickedNoteName TEXT)''');
-  //     },
-  //     version: 1,
-  //   );
-  // }
-
-  // Method to insert a clicked note
-  // Future<void> insertClickedNote(String clickedNoteName) async {
-  //   final db = await _openDatabase();
-  //   final data = {
-  //     'clickedNoteName': clickedNoteName,
-  //   };
-  //   await db.insert('clickedNotes', data);
-  // }
-
-  // Method to retrieve the last clicked note
-  // Future<Map<String, dynamic>?> getLastClickedNote() async {
-  //   final db = await _openDatabase();
-  //   final List<Map<String, dynamic>> result = await db.query(
-  //     'clickedNotes',
-  //     orderBy:
-  //         'id DESC', // Order by id in descending order to get the last clicked note
-  //     limit: 1,
-  //   );
-
-  //   if (result.isNotEmpty) {
-  //     return result.first;
-  //   } else {
-  //     return null;
-  //   }
-  // }
-
-  // ... (rest of your code)
 }

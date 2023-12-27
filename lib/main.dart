@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: Colors.pink,
         useMaterial3: true,
-      ),
+      ),//ThemeData
       home: const MyHomePage(),
     ); //MaterialApp
   }
