@@ -4,6 +4,11 @@ import 'package:intl/intl.dart'; //used for formatting date.
 import 'package:table_calendar/table_calendar.dart';
 import './db_helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import './custom_next_month_button.dart';
+import './custom_prev_month_button.dart';
+import './custom_drawer.dart';
+import 'custom_popup_menu_button.dart';
+import './custom_colored_user_answer_button.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -14,14 +19,8 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   SharedPreferences? _preferences;
-  // _initialisePreferences();
-  // final DbHelper dbHelper = DbHelper();
-  // late String lastClickedNoteName;
-  // late String lastClickedNoteQuery;
   //Defining dynamic list for the data entered by the user
   List<Map<String, dynamic>> dataList = [];
-  //Defining dynamic list for the data clicked by the user on the Drawer
-  // List<Map<String, dynamic>> dataList2 = [];
   //Calendar format defined here
   CalendarFormat _calendarFormat = CalendarFormat.month;
   //FocusedDay is the current date time
@@ -30,17 +29,11 @@ class _MyHomePageState extends State<MyHomePage> {
   final DateTime _displayDate = DateTime.now();
   //_selectedDay is a DateTime variable
   DateTime? _selectedDay;
-  //Textboxes controllers defined here
-  final _newNoteNameController = TextEditingController();
-  final _questionOnNewNoteController = TextEditingController();
-  //_scrollController is defined here
-  final ScrollController _scrollController = ScrollController();
   //Strings which record the clicked data on the 'Drawer' is stored in these
   //variables
   String? _clickedNote;
   String? _clickedNoteQuery;
-  String? text1;
-  String? text2;
+
 //
 //
 
@@ -55,9 +48,9 @@ class _MyHomePageState extends State<MyHomePage> {
     _initialisePreferences();
   }
 
-  void _saveStandardValues(String key, String value) {
-    _preferences?.setString(key, value);
-  }
+  // void _saveStandardValues(String key, String value) {
+  //   _preferences?.setString(key, value);
+  // }
 
   String? _getStandardValue(String key) {
     if (_preferences != null) {
@@ -67,93 +60,6 @@ class _MyHomePageState extends State<MyHomePage> {
       return null;
     }
   }
-
-  //This will open a Modal bottom sheet to add new notes in the calendar
-  void _openAddMainOverlay() {
-    showModalBottomSheet(
-      isScrollControlled: true,
-      //In a "showModalBottomSheet()" property always call single child scroll
-      //view & then call a container to it's child. In this container, the
-      //padding will be "Edgeinsets.Only()" , without a constant at the start
-      //and call within it "bottom: MediaQuery.of(context).viewInsets.bottom,".
-      //With this we can always keep the bottom modal sheet's all widgets
-      //above the pop up keyboard. Also remember to call the bottom modal sheet
-      // property "isScrollControlled: true," , without which keeping all
-      //widgets above the keyboard is not possible.
-      context: context,
-      builder: (ctx) => SingleChildScrollView(
-        child: Container(
-          padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom,
-            top: 15.0,
-            right: 15.0,
-            left: 15.0,
-          ),
-          //The height is disabled here, as we don't want a specific height of
-          //bottom modal sheet here. If you want to keep a specific height
-          // of bottom modal sheet, you should define it here and a trial &
-          //error method to be done to check which height is suitable.
-          //Generally height of 75.0 is very small & height of 550 is just
-          //midway.
-          //-----------------------------------------------
-          //height: 580,
-          //-----------------------------------------------
-          child: Column(
-            children: [
-              TextField(
-                controller: _newNoteNameController,
-                decoration: const InputDecoration(
-                  label: Text(
-                      //Creating text field for inputs
-                      'Name Of New Note :'),
-                ), //InputDecoration
-              ), //TextField
-              TextField(
-                controller: _questionOnNewNoteController,
-                decoration: const InputDecoration(
-                  label: Text(
-                      //Creating text field for inputs
-                      'Question On New Note ?'),
-                ), //Inputdecoration
-              ), //TextField
-              ElevatedButton(
-                onPressed: () {
-                  _saveData(); //calling "_saveData()" method
-                },
-                style: ButtonStyle(
-                  backgroundColor:
-                      MaterialStateProperty.all(Colors.amberAccent),
-                ),
-                child: const Text('Save New Note Properties'),
-              ), //ElevatedButton
-            ],
-          ), //Column
-        ), //Container
-      ), //SingleChildScrollView
-    );
-  }
-
-  //
-  //
-  void _saveData() async {
-    final noteName = _newNoteNameController.text;
-    final noteQuery = _questionOnNewNoteController.text;
-    int insertId = await DbHelper().insertUser(noteName, noteQuery);
-    debugPrint(insertId.toString()); //This line is for testing purpose only
-    //Refresh data after saving it, otherwise it will not display
-    List<Map<String, dynamic>> updatedData = await DbHelper().getData();
-    setState(() {
-      dataList = updatedData;
-    });
-    //After updation set the controller values to null to clear the text fields
-    _newNoteNameController.clear();
-    _questionOnNewNoteController.text = '';
-  }
-
-  //
-  //
-
-//
 
 //creating a "fetchData" method for the edit update screen class to pass data
 //edited to the main screen.
@@ -167,9 +73,6 @@ class _MyHomePageState extends State<MyHomePage> {
 //Disposing all controllers
   @override
   void dispose() {
-    _scrollController.dispose();
-    _newNoteNameController.dispose();
-    _questionOnNewNoteController.dispose();
     super.dispose();
   }
 
@@ -193,46 +96,9 @@ class _MyHomePageState extends State<MyHomePage> {
     _fetchData();
     //
     //
-    //
-    //
 
     return Scaffold(
-      //update data in this screen
-      //
-      drawer: Drawer(
-        width: MediaQuery.of(context).size.width / 1.7, //Size 220.0 is suitable
-        backgroundColor: Colors.white24,
-        child: Container(
-          padding: const EdgeInsets.only(top: 0.7, left: 0.7, right: 1.0),
-          color: const Color.fromARGB(240, 224, 223, 223),
-          child: Scrollbar(
-            thumbVisibility: true,
-            controller: _scrollController,
-            child: ListView.builder(
-              controller: _scrollController,
-              itemCount: dataList.length,
-              itemBuilder: (context, index) => Container(
-                color: const Color.fromARGB(255, 206, 124, 2),
-                padding: const EdgeInsets.only(right: 1.5, left: 1.0),
-                child: ListTile(
-                  dense: true,
-                  title: InkWell(
-                    onTap: () {
-                      _clickedNote = dataList[index]['noteName'];
-                      _clickedNoteQuery = dataList[index]['noteQuery'];
-                      _saveStandardValues('key1', _clickedNote!);
-                      _saveStandardValues('key2', _clickedNoteQuery!);
-                      Navigator.of(context).pop(); //This will close the drawer
-                    },
-                    child: Text(dataList[index]['noteName']),
-                  ), //InkWell
-                ), //ListTile
-              ), //Container
-            ), //ListView.builder
-          ), //ScrollBar
-        ), //Container
-      ), //Drawer
-
+      drawer: const CustomDrawer(), // called custom drawer here
       appBar: AppBar(
         backgroundColor: Colors.teal,
         centerTitle: true,
@@ -243,47 +109,8 @@ class _MyHomePageState extends State<MyHomePage> {
             fontWeight: FontWeight.normal,
           ), //TextStyle
         ), //Text
-        actions: [
-          PopupMenuButton(itemBuilder: (context) {
-            return [
-              PopupMenuItem(
-                value: 0,
-                onTap: _openAddMainOverlay, //Opening the bottom modal sheet
-                child: const ListTile(
-                  leading: Icon(
-                    Icons.edit_document,
-                    size: 18.0,
-                  ),
-                  title: Text(
-                    "Add new note",
-                  ), //Text
-                ), //ListTile
-              ), //PopupMenuItem
-              const PopupMenuItem(
-                value: 1,
-                child: Text('Setting'),
-              ), //PopupMenuItem
-              const PopupMenuItem(
-                value: 2,
-                child: ListTile(
-                  contentPadding: EdgeInsets.all(0.2),
-                  leading: Icon(
-                    Icons.home,
-                    size: 30.0,
-                  ), //Icon
-                  title: Text("Reports"),
-                ), //ListTile
-              ), //PopupMenuItem
-              const PopupMenuItem(
-                value: 3,
-                child: Text('Edit Notes'),
-              ), //PopupMenuItem
-              const PopupMenuItem(
-                value: 4,
-                child: Text('Delete Notes'),
-              ), //PopupMenuItem
-            ];
-          }), //PopupMenuItem
+        actions: const [
+          CustomPopupMenuButton(),
         ],
       ), //AppBar
       body: SingleChildScrollView(
@@ -363,6 +190,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     ]), //Column
               ), //Padding
             ), //Container
+            //Third Block to show the Calendar
             Container(
               padding: const EdgeInsets.all(10.0),
               color: Colors.brown,
@@ -446,53 +274,7 @@ class _MyHomePageState extends State<MyHomePage> {
             const SizedBox(
               height: 2.0,
             ), //SizedBox
-            Container(
-              padding: const EdgeInsets.all(10.0),
-              width: double.infinity, //width of 3rd Block
-              height: 80.0,
-              color: Colors.grey,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      // visualDensity:
-                      //     const VisualDensity(vertical: 1.0, horizontal: 1.0),
-                      // minimumSize: const Size(1, 1),
-                      backgroundColor: Colors.red,
-                      foregroundColor: Colors.white,
-                    ),
-                    child: const Text('R'),
-                  ), //ElevatedButton
-                  ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
-                      foregroundColor: Colors.white,
-                    ),
-                    child: const Text('G'),
-                  ), //ElevatedButton
-                  ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue,
-                      foregroundColor: Colors.white,
-                    ),
-                    child: const Text('B'),
-                  ), //ElevatedButton
-                  ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.yellow,
-                      foregroundColor: Colors.black,
-                    ),
-                    child: const Text('Y'),
-                  ), //ElevatedButton
-                ],
-              ), //Row
-            ) //Container
-            // print(_focusedDay),
+            const CustomColoredUserAnswerButton(),
           ],
         ), //Column
       ), //SingleChildScrollView
@@ -503,32 +285,3 @@ class _MyHomePageState extends State<MyHomePage> {
 //For Theme Coloring use below class (see example)
 //class _amberAccentPrimaryValue() {}
 
-class CustomPrevMonthButton extends StatelessWidget {
-  const CustomPrevMonthButton({required this.onPressed, super.key});
-  final VoidCallback onPressed;
-
-  @override
-  Widget build(BuildContext context) {
-    return TextButton(
-      onPressed: onPressed,
-      child: const Icon(
-        Icons.arrow_back_ios_new_sharp,
-      ), //Icon
-    ); //TextButton
-  }
-}
-
-class CustomNextMonthButton extends StatelessWidget {
-  const CustomNextMonthButton({required this.onPressed, super.key});
-  final VoidCallback onPressed;
-
-  @override
-  Widget build(BuildContext context) {
-    return TextButton(
-      onPressed: onPressed,
-      child: const Icon(
-        Icons.arrow_forward_ios_sharp,
-      ), //Icon
-    ); //TextButton
-  }
-}
